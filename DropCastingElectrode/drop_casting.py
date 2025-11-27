@@ -108,8 +108,8 @@ def run(protocol: protocol_api.ProtocolContext):
     source = rack20_6["A1"]
     destination_wells = list(electrode_plate.wells())   # 384 positions
 
-    dist_volume = 2      # 2 µL per spot
-    load_volume = 200    # aspirate 200 µL at a time into P1000
+    dist_volume = 10      # 2 µL per spot
+    load_volume = 500    # aspirate 200 µL at a time into P1000
 
     p1000.pick_up_tip()
     remaining = 0
