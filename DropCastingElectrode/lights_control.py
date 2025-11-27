@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print("1 = ON, 0 = OFF")
     choice = input("Select (1/0): ").strip()
     if choice == "1":
-        lights_on()
+        lights_on()1
     elif choice == "0":
         lights_off()
     else:
