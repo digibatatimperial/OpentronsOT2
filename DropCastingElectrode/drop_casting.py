@@ -11,12 +11,11 @@ def run(protocol: protocol_api.ProtocolContext):
     # ============================================================
     # MODULES
     # ============================================================
-    # Slot 4 — main Heater–Shaker with universal flat adapter
+    # Slot 4 — Heater–Shaker
     hs4 = protocol.load_module("heaterShakerModuleV1", 4)
-    flat_adapter = hs4.load_adapter("opentrons_universal_flat_adapter")
 
-    # Custom DIGIBAT 384 electrode sheet (your new custom labware)
-    electrode_plate = flat_adapter.load_labware(
+    # Load your custom DIGIBAT 384 electrode sheet *directly* on the module
+    electrode_plate = hs4.load_labware(
         "digibat_384_wellplate_1000ul",
         label="DIGIBAT 384 Electrode Sheet"
     )
@@ -28,10 +27,14 @@ def run(protocol: protocol_api.ProtocolContext):
     # LABWARE
     # ============================================================
     # Slot 1 — HPLC 40-vial rack
-    hplc_1 = protocol.load_labware("digibathplc2ml40vials_40_tuberack_2000ul", 1)
+    hplc_1 = protocol.load_labware(
+        "digibathplc2ml40vials_40_tuberack_2000ul", 1
+    )
 
     # Slot 2 — HPLC 40-vial rack
-    hplc_2 = protocol.load_labware("digibathplc2ml40vials_40_tuberack_2000ul", 2)
+    hplc_2 = protocol.load_labware(
+        "digibathplc2ml40vials_40_tuberack_2000ul", 2
+    )
 
     # Slot 3 — DIGIBAT 20 mL 8-tube rack
     rack20_3 = protocol.load_labware("digibat_20ml_8_tube_rack", 3)
@@ -96,17 +99,17 @@ def run(protocol: protocol_api.ProtocolContext):
     hs4.set_target_temperature(50)
     hs4.wait_for_temperature()
 
-    # (Optional) You can add shaking if you want:
+    # (Optional) shaking if needed:
     # hs4.set_and_wait_for_shake_speed(500)
 
     # ============================================================
     # DROP CASTING — DISTRIBUTE 2 µL TO ALL 384 POSITIONS
     # ============================================================
     source = rack20_6["A1"]
-    destination_wells = list(electrode_plate.wells())   # 384 wells
+    destination_wells = list(electrode_plate.wells())   # 384 positions
 
     dist_volume = 2      # 2 µL per spot
-    load_volume = 300    # aspirate 200 µL at a time into P1000
+    load_volume = 200    # aspirate 200 µL at a time into P1000
 
     p1000.pick_up_tip()
     remaining = 0
