@@ -29,11 +29,6 @@
     "yDimension": 85.47,
     "zDimension": 14.22
   },
-  "offset": {
-    "x": 0,
-    "y": 0,
-    "z": 0
-  },
   "wells": {
     "A1": {
       "depth": 11.43,
