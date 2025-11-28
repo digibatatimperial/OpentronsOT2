@@ -1,0 +1,45 @@
+import json
+
+# 1. Load your existing file
+with open("digibat_1536_wellplate_1000ul.json", "r", encoding="utf-8") as f:
+    lw = json.load(f)
+
+row_mapping = {
+    "[": "AA",
+    "\\": "AB",
+    "]": "AC",
+    "^": "AD",
+    "_": "AE",
+    "`": "AF",
+}
+
+def fix_name(name: str) -> str:
+    # split row vs column: letters/symbols at start, then digits
+    i = 0
+    while i < len(name) and not name[i].isdigit():
+        i += 1
+    row = name[:i]
+    col = name[i:]
+    if row in row_mapping:
+        row = row_mapping[row]
+    return row + col
+
+def fix_list(names):
+    return [fix_name(n) for n in names]
+
+# 2. Fix ordering
+lw["ordering"] = [fix_list(row) for row in lw["ordering"]]
+
+# 3. Fix groups[0].wells (if present)
+if "groups" in lw and lw["groups"]:
+    lw["groups"][0]["wells"] = fix_list(lw["groups"][0]["wells"])
+
+# 4. Fix wells dict keys
+lw["wells"] = {fix_name(k): v for k, v in lw["wells"].items()}
+
+# 5. (Optional) make sure loadName is correct
+lw["parameters"]["loadName"] = "digibat_1536_wellplate_1000ul"
+
+# 6. Save as a new file
+with open("digibat_1536_wellplate_1000ul_fixed.json", "w", encoding="utf-8") as f:
+    json.dump(lw, f, indent=2)
